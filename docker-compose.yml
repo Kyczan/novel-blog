@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+  mongoclient:
+    image: mongoclient/mongoclient
+    restart: always
+    ports:
+      - 3000:3000
+
+  dbmongo:
+    image: mongo:3.6.2
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: changeme
+
+  server:
+    build: ./server
+    ports:
+      - 3001:3001
+    volumes:
+      - ./server/src:/srv/app/server/src
+    depends_on:
+      - dbmongo
